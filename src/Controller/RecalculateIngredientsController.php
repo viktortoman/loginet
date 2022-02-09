@@ -25,13 +25,16 @@ class RecalculateIngredientsController extends AbstractController
     /**
      * @Route("/recalculate/ingredients/{servings}", name="recalculate_ingredients")
      */
-    public function index(int $servings = 1): Response
+    public function index(int $servings = 0): Response
     {
         $ingredients = $this->recalculateIngredientsService->recalculateIngredients($servings);
 
-        return $this->json([
-            'servings' => $servings,
-            'data' => $ingredients
-        ]);
+        if ($servings > 0) {
+            $response['servingsParam'] = $servings;
+        }
+
+        $response['data'] = $ingredients;
+
+        return $this->json($response);
     }
 }
