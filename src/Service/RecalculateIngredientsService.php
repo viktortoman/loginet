@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use JsonException;
+
 class RecalculateIngredientsService
 {
     /**
@@ -63,9 +65,18 @@ class RecalculateIngredientsService
      */
     private function readAndDecodeIngredientsFile(): array
     {
-        $ingredients = file_get_contents('assets/ingredients.json');
+        try {
+            $ingredients = file_get_contents('assets/ingredients.json');
+            $jsonArray = json_decode(preg_replace( "/\r|\n/", "", $ingredients), true);
 
-        return json_decode(preg_replace( "/\r|\n/", "", $ingredients), true);
+            if (is_null($jsonArray)) {
+                throw new \Exception('JSON decode error.');
+            }
+
+            return $jsonArray;
+        } catch (JsonException $exception) {
+            die($exception);
+        }
     }
 
     /**
