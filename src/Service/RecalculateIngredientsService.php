@@ -33,10 +33,10 @@ class RecalculateIngredientsService
     public function __construct()
     {
         $this->ingredientsArray = $this->readAndDecodeIngredientsFile();
-        $this->actualServings = $this->ingredientsArray['servings'];
+        $this->actualServings = $this->ingredientsArray['servings'] <= 0 ? 1 : $this->ingredientsArray['servings'];
         $this->newIngredients = [
             'title' => $this->ingredientsArray['title'],
-            'servings' => $this->newServings,
+            'servings' => $this->actualServings,
             'ingredients' => []
         ];
 
@@ -49,11 +49,7 @@ class RecalculateIngredientsService
      */
     public function recalculateIngredients(int $servings): array
     {
-        if ($servings <= 0) {
-            $servings = 1;
-        }
-
-        $this->newServings = $servings;
+        $this->newServings = $servings > 0 ? $servings : $this->actualServings;
         $this->newIngredients['servings'] = $this->newServings;
         $this->transformIngredients();
 
