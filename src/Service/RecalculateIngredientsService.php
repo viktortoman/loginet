@@ -29,6 +29,7 @@ class RecalculateIngredientsService
 
     /**
      *
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -58,6 +59,7 @@ class RecalculateIngredientsService
 
     /**
      * @return array
+     * @throws \Exception
      */
     private function readAndDecodeIngredientsFile(): array
     {
